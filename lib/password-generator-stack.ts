@@ -123,23 +123,23 @@ export class PasswordGeneratorStack extends cdk.Stack {
       methodResponses: commonMethodResponses,
     });
 
-    // 6. Stack Outputs
+    // 6. Stack Outputs (using stack-specific export names to prevent collisions across environments/pipeline stages)
     new cdk.CfnOutput(this, 'ApiEndpointUrl', {
       value: this.api.url,
       description: 'Base URL of the Password Generator REST API',
-      exportName: 'PasswordGeneratorApiBaseUrl',
+      exportName: `${this.stackName}-ApiBaseUrl`,
     });
 
     new cdk.CfnOutput(this, 'GeneratePasswordEndpointUrl', {
       value: `${this.api.url}generate-password`,
       description: 'Direct endpoint to generate passwords via POST or GET',
-      exportName: 'GeneratePasswordEndpointUrl',
+      exportName: `${this.stackName}-GeneratePasswordUrl`,
     });
 
     new cdk.CfnOutput(this, 'LambdaFunctionArn', {
       value: this.passwordFunction.functionArn,
       description: 'ARN of the Password Generator Lambda Function',
-      exportName: 'PasswordGeneratorLambdaArn',
+      exportName: `${this.stackName}-LambdaArn`,
     });
   }
 }

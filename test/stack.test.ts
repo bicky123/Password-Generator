@@ -65,19 +65,19 @@ describe('PasswordGeneratorStack CDK Assertions', () => {
   test('defines stack outputs for API Endpoint and Lambda ARN', () => {
     template.hasOutput('ApiEndpointUrl', {
       Export: {
-        Name: 'PasswordGeneratorApiBaseUrl',
+        Name: 'TestPasswordGeneratorStack-ApiBaseUrl',
       },
     });
 
     template.hasOutput('GeneratePasswordEndpointUrl', {
       Export: {
-        Name: 'GeneratePasswordEndpointUrl',
+        Name: 'TestPasswordGeneratorStack-GeneratePasswordUrl',
       },
     });
 
     template.hasOutput('LambdaFunctionArn', {
       Export: {
-        Name: 'PasswordGeneratorLambdaArn',
+        Name: 'TestPasswordGeneratorStack-LambdaArn',
       },
     });
   });
