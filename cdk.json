@@ -17,6 +17,9 @@
     ]
   },
   "context": {
+    "connectionArn": "arn:aws:codeconnections:us-east-1:499295267221:connection/3a78245c-c4e1-4200-b809-43206ace82bd",
+    "githubRepo": "bicky123/Password-Generator",
+    "githubBranch": "main",
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [
