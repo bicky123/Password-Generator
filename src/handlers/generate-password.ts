@@ -91,10 +91,14 @@ const handleGeneratePassword = (req: Request, res: Response) => {
   });
 };
 
-// Route handlers for POST and GET /generate-password
+// Route handlers for POST, GET, OPTIONS on /generate-password and /nodejs/generate-password
 api.post('/generate-password', handleGeneratePassword);
 api.get('/generate-password', handleGeneratePassword);
 api.options('/generate-password', (_req: Request, res: Response) => res.sendStatus(204));
+
+api.post('/nodejs/generate-password', handleGeneratePassword);
+api.get('/nodejs/generate-password', handleGeneratePassword);
+api.options('/nodejs/generate-password', (_req: Request, res: Response) => res.sendStatus(204));
 
 // Global error handling middleware
 api.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {

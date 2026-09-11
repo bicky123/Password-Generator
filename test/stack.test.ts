@@ -23,7 +23,17 @@ describe('PasswordGeneratorStack CDK Assertions', () => {
     });
   });
 
-  test('synthesizes LogGroup with retention of 7 days', () => {
+  test('synthesizes Lambda Function with .NET 8 runtime and ARM64 architecture', () => {
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Runtime: 'dotnet8',
+      Architectures: ['arm64'],
+      Handler: 'PasswordGeneratorLambda::PasswordGeneratorLambda.Function::FunctionHandler',
+      MemorySize: 256,
+      Timeout: 10,
+    });
+  });
+
+  test('synthesizes LogGroups with retention of 7 days', () => {
     template.hasResourceProperties('AWS::Logs::LogGroup', {
       RetentionInDays: 7,
     });
@@ -38,31 +48,38 @@ describe('PasswordGeneratorStack CDK Assertions', () => {
       PathPart: 'generate-password',
     });
 
-    // Check POST method existence on /generate-password
+    // Check POST method existence on default /generate-password
     template.hasResourceProperties('AWS::ApiGateway::Method', {
       HttpMethod: 'POST',
-      OperationName: 'GeneratePasswordPost',
+      OperationName: 'DefaultGeneratePasswordPost',
       Integration: {
         Type: 'AWS_PROXY',
       },
     });
 
-    // Check GET method existence on /generate-password
+    // Check GET method existence on default /generate-password
     template.hasResourceProperties('AWS::ApiGateway::Method', {
       HttpMethod: 'GET',
-      OperationName: 'GeneratePasswordGet',
+      OperationName: 'DefaultGeneratePasswordGet',
       Integration: {
         Type: 'AWS_PROXY',
       },
     });
 
-    // Check OPTIONS method existence for CORS
+    // Check Dotnet POST method
     template.hasResourceProperties('AWS::ApiGateway::Method', {
-      HttpMethod: 'OPTIONS',
+      HttpMethod: 'POST',
+      OperationName: 'DotnetGeneratePasswordPost',
+    });
+
+    // Check Nodejs POST method
+    template.hasResourceProperties('AWS::ApiGateway::Method', {
+      HttpMethod: 'POST',
+      OperationName: 'NodejsGeneratePasswordPost',
     });
   });
 
-  test('defines stack outputs for API Endpoint and Lambda ARN', () => {
+  test('defines stack outputs for API Endpoints and Lambda ARNs', () => {
     template.hasOutput('ApiEndpointUrl', {
       Export: {
         Name: 'TestPasswordGeneratorStack-ApiBaseUrl',
@@ -75,9 +92,27 @@ describe('PasswordGeneratorStack CDK Assertions', () => {
       },
     });
 
-    template.hasOutput('LambdaFunctionArn', {
+    template.hasOutput('DotnetGeneratePasswordEndpointUrl', {
       Export: {
-        Name: 'TestPasswordGeneratorStack-LambdaArn',
+        Name: 'TestPasswordGeneratorStack-DotnetGeneratePasswordUrl',
+      },
+    });
+
+    template.hasOutput('NodejsGeneratePasswordEndpointUrl', {
+      Export: {
+        Name: 'TestPasswordGeneratorStack-NodejsGeneratePasswordUrl',
+      },
+    });
+
+    template.hasOutput('DotnetLambdaArn', {
+      Export: {
+        Name: 'TestPasswordGeneratorStack-DotnetLambdaArn',
+      },
+    });
+
+    template.hasOutput('NodejsLambdaArn', {
+      Export: {
+        Name: 'TestPasswordGeneratorStack-NodejsLambdaArn',
       },
     });
   });

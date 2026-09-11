@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as pipelines from 'aws-cdk-lib/pipelines';
+import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import { PasswordGeneratorAppStage } from './pipeline-stage';
 
 export interface PasswordGeneratorPipelineStackProps extends cdk.StackProps {
@@ -61,12 +62,17 @@ export class PasswordGeneratorPipelineStack extends cdk.Stack {
       });
     }
 
-    // 2. Define CDK Pipeline with Self-Mutation and Synth step
+    // 2. Define CDK Pipeline with Self-Mutation and Synth step supporting both .NET and Node.js
     this.pipeline = new pipelines.CodePipeline(this, 'PasswordGeneratorPipeline', {
       pipelineName: 'PasswordGenerator-ContinuousDelivery',
       synth: new pipelines.CodeBuildStep('Synth', {
         input: source,
-        installCommands: ['npm ci'],
+        buildEnvironment: {
+          buildImage: codebuild.LinuxBuildImage.STANDARD_7_0, // Pre-installed .NET 8 SDK and modern Node.js
+        },
+        installCommands: [
+          'npm ci',
+        ],
         commands: [
           'npm run build',
           'npm test',
@@ -78,7 +84,7 @@ export class PasswordGeneratorPipelineStack extends cdk.Stack {
       dockerEnabledForSynth: false,
     });
 
-    // 3. Add Application Deployment Stage
+    // 3. Add Application Deployment Stage (deploys both Node.js & .NET Lambdas)
     const deployStage = new PasswordGeneratorAppStage(this, 'Prod', {
       env: {
         account: props?.env?.account ?? process.env.CDK_DEFAULT_ACCOUNT,

@@ -29,7 +29,7 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
+# Compiled binary addons
 build/Release
 
 # Dependency directories
@@ -62,8 +62,33 @@ typings/
 cdk.out
 .cdk.staging
 
-# Compiled TypeScript outputs
+# Compiled TypeScript & Build outputs
 *.js
 !jest.config.js
 *.d.ts
+build/
+dist/
 
+# .NET / C# Build and Output Files
+[Bb]in/
+[Oo]bj/
+[Aa]rms/
+[Aa]rm64/
+
+# NuGet packages and caches
+*.nupkg
+*.snupkg
+nuget-local/
+packages/
+project.lock.json
+project.assets.json
+
+# Visual Studio / VS Code / Rider / macOS
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.DS_Store
+Thumbs.db

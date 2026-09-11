@@ -1,15 +1,19 @@
 {
   "name": "password-generator-cdk",
   "version": "1.0.0",
-  "description": "Serverless Password Generator using AWS CDK (v2), API Gateway, and Node.js Lambda",
+  "description": "Serverless Password Generator using AWS CDK (v2), API Gateway, Node.js and .NET Lambdas",
   "main": "bin/app.js",
   "scripts": {
-    "build": "tsc",
+    "build:dotnet": "dotnet publish dotnet-src/PasswordGeneratorLambda/PasswordGeneratorLambda.csproj -c Release -o dist/dotnet-lambda",
+    "build:node": "tsc",
+    "build": "npm run build:dotnet && npm run build:node",
     "watch": "tsc -w",
-    "test": "jest",
+    "test:dotnet": "dotnet run --project dotnet-test/TestRunner/TestRunner.csproj",
+    "test:node": "jest",
+    "test": "npm run test:dotnet && npm run test:node",
     "cdk": "cdk",
-    "synth": "cdk synth",
-    "deploy": "cdk deploy",
+    "synth": "npm run build && cdk synth",
+    "deploy": "npm run build && cdk deploy",
     "diff": "cdk diff"
   },
   "keywords": [
@@ -19,6 +23,7 @@
     "lambda",
     "api-gateway",
     "password-generator",
+    "dotnet",
     "typescript"
   ],
   "author": "",
