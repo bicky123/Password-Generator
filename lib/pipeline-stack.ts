@@ -71,6 +71,8 @@ export class PasswordGeneratorPipelineStack extends cdk.Stack {
           buildImage: codebuild.LinuxBuildImage.STANDARD_7_0, // Pre-installed .NET 8 SDK and modern Node.js
         },
         installCommands: [
+          'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 8.0 --install-dir /root/.dotnet',
+          'dotnet --version',
           'npm ci',
         ],
         commands: [
