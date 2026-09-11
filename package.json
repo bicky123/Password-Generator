@@ -4,11 +4,11 @@
   "description": "Serverless Password Generator using AWS CDK (v2), API Gateway, Node.js and .NET Lambdas",
   "main": "bin/app.js",
   "scripts": {
-    "build:dotnet": "dotnet publish dotnet-src/PasswordGeneratorLambda/PasswordGeneratorLambda.csproj -c Release -o dist/dotnet-lambda",
+    "build:dotnet": "([ -f /root/.dotnet/dotnet ] && /root/.dotnet/dotnet publish dotnet-src/PasswordGeneratorLambda/PasswordGeneratorLambda.csproj -c Release -o dist/dotnet-lambda) || dotnet publish dotnet-src/PasswordGeneratorLambda/PasswordGeneratorLambda.csproj -c Release -o dist/dotnet-lambda",
     "build:node": "tsc",
     "build": "npm run build:dotnet && npm run build:node",
     "watch": "tsc -w",
-    "test:dotnet": "dotnet run --project dotnet-test/TestRunner/TestRunner.csproj",
+    "test:dotnet": "([ -f /root/.dotnet/dotnet ] && /root/.dotnet/dotnet run --project dotnet-test/TestRunner/TestRunner.csproj) || dotnet run --project dotnet-test/TestRunner/TestRunner.csproj",
     "test:node": "jest",
     "test": "npm run test:dotnet && npm run test:node",
     "cdk": "cdk",
