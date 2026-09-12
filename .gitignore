@@ -86,6 +86,7 @@ project.assets.json
 # Visual Studio / VS Code / Rider / macOS
 .vs/
 .vscode/
+.idea/
 *.suo
 *.user
 *.userosscache

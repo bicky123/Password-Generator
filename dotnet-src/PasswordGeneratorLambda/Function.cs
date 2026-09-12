@@ -1,11 +1,13 @@
 using System.Text.Json;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.RuntimeSupport;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using PasswordGeneratorLambda.Models;
 using PasswordGeneratorLambda.Services;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+[assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
 namespace PasswordGeneratorLambda;
 
@@ -24,6 +26,18 @@ public class Function
         { "Access-Control-Allow-Methods", "GET,POST,OPTIONS" },
         { "Content-Type", "application/json" }
     };
+
+    /// <summary>
+    /// The main entry point for the custom runtime (provided.al2023) bootstrap.
+    /// </summary>
+    public static async Task Main(string[] args)
+    {
+        var function = new Function();
+        Func<APIGatewayProxyRequest, ILambdaContext, APIGatewayProxyResponse> handler = function.FunctionHandler;
+        await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
+            .Build()
+            .RunAsync();
+    }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {

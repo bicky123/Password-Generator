@@ -23,11 +23,11 @@ describe('PasswordGeneratorStack CDK Assertions', () => {
     });
   });
 
-  test('synthesizes Lambda Function with .NET 8 runtime and ARM64 architecture', () => {
+  test('synthesizes Lambda Function with .NET 10 custom runtime (provided.al2023) and ARM64 architecture', () => {
     template.hasResourceProperties('AWS::Lambda::Function', {
-      Runtime: 'dotnet8',
+      Runtime: 'provided.al2023',
       Architectures: ['arm64'],
-      Handler: 'PasswordGeneratorLambda::PasswordGeneratorLambda.Function::FunctionHandler',
+      Handler: 'bootstrap',
       MemorySize: 256,
       Timeout: 10,
     });

@@ -58,16 +58,19 @@ export class PasswordGeneratorStack extends cdk.Stack {
       description: 'Serverless password generator using Node.js TypeScript and lambda-api',
     });
 
-    // 3. Define .NET 8 Lambda function
+    // 3. Define .NET 10 Lambda function (provided.al2023 custom runtime)
     this.dotnetFunction = new lambda.Function(this, 'DotnetPasswordGeneratorHandler', {
-      runtime: lambda.Runtime.DOTNET_8,
-      handler: 'PasswordGeneratorLambda::PasswordGeneratorLambda.Function::FunctionHandler',
+      runtime: lambda.Runtime.PROVIDED_AL2023,
+      handler: 'bootstrap',
       code: lambda.Code.fromAsset(path.join(__dirname, '../dist/dotnet-lambda')),
       memorySize: 256,
       timeout: cdk.Duration.seconds(10),
       logGroup: this.dotnetLogGroup,
       architecture: lambda.Architecture.ARM_64,
-      description: 'Serverless password generator using .NET 8 C# Lambda',
+      environment: {
+        DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: '1',
+      },
+      description: 'Serverless password generator using .NET 10 C# Lambda (provided.al2023)',
     });
 
     // 4. Define Amazon API Gateway REST API with CORS configured
